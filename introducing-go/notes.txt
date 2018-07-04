@@ -1,0 +1,484 @@
+Chapter 1 - Getting Started
+
+1. Package Declaration
+	- must start with this
+	- two types, executables and libraries
+	- ex:
+		package main
+
+2. Import Statement
+	- include code from other packages
+	- should be surrounded by double quotes
+	- ex:
+		import “fmt”
+
+3. Comments
+	- // or /* */
+
+4. Function Declaration
+	- must start with keyword func
+	- zero or more parameters
+	- does not have to return anything
+	- ex:
+		func main(){
+			//code
+		}
+
+5. Accessing Package Functions
+	- package name followed by a period and function name
+	- ex:
+		fmt.Println(“Hello, World”)
+
+6. Accessing Go Documentation for Package Function
+	- type into terminal godoc , package name, and function name separated by spaces
+	- ex:
+		godoc fmt Println
+
+Chapter 2 - Types
+
+1. Go
+	- a statically typed programming lang
+	- all variables have a specific type and that type cannot change
+
+
+2. Built-in data types
+	- Numbers
+		- Integers
+			- number without decimal component
+			- uint8, uint16, uint32, uint64, int8, int16, int32, int64
+			- number specifies bytes used
+			- unsigned means only positive numbers (or zero)
+			- two alias’s exist
+				- byte (uint8)
+				- rune (int32)
+			- machine dependent types exist (probably won’t need)
+			- generally, use int type
+		- Floating-Point Numbers
+			- number with decimal component
+			- using a larger sized floating-point number increases its precision (how many digits it can represent)
+			- additionally can represent, Not a number (NaN) and positive or negative infinity
+			- float32 and float64 (single or double precision respectively)
+			- complex64 and complex128 (number with imaginary parts)
+			- generally, use float64
+		- numeric literal
+			- ex:
+				fmt.Println("1 + 1 = ", 1 + 1)
+				fmt.Println("1 + 1 = ", 1.0 + 1.0)
+			- both print out to 1 + 1 =  2
+		- standard arithmetic operators
+			- (+, -, *, /, %)
+	- Strings
+		- sequence of chars with a definite length
+		- made up of individual bytes, usually one per char
+			- ex:
+				fmt.Println("Hello, World"[1])
+			- returns 101 for byte, not integer
+			- exceptions (ex: Chinese chars)
+		- string literals double quotes or backpacks
+			- double quotes cannot contain newlines and allow special escape sequences
+		- concatenation is a plus symbol
+	- Booleans
+		- 1-bit integer type used to represent true of false
+		- three logical operators
+			- && and
+			- || or
+			- ! not
+		- written as true or false
+
+
+3. Variables
+	- storage location with a specific type and name
+	- created by using the var keyword, variable name, and the type
+	- assigning value when variable is created is optional
+	- variables can be reassigned a different value
+	- comparing equality is done with two equal signs
+		- ex:
+			fmt.Println(a == b)
+	- shorthand allowed for creating a new variable with a starting value
+		- type is not necessary because the Go compiler is able to infer the type based on the literal value
+		- shorter form is better practice when possible
+		- ex:
+			var x := “Hello, World”
+	- Scope
+		- variables can be declared and assigned outside of functions
+		- ex:
+			var x string = “Hello, World”
+
+			func main(){
+				fmt.Println(x)
+			}
+	- Constants
+		- values cannot be changed later
+		- created by replacing keyword var with const
+	- Defining multiple variables with shorthand
+		ex:
+			var (
+				a = 5
+				b = 10
+				c = 15
+			)
+4. Control Structures
+	- The for Statement
+		- follows the keyword for, a conditional expression, and a block to execute
+		- ex:
+			i := 1
+			for i <= 10 {
+				fmt.Println(i)
+				i = i + 1
+			}
+		- this is the only loop Go has (no while, do, foreach, until)
+		- for loops can also contain a variable initialization and variable manipulator
+		- shorthand, increment ++ and decrement —
+		- ex:
+			for i := 1; i <= 10; i++ {
+				fmt.Println(i)
+			}
+	- The if Statement
+		- if keyword, condition, followed by block
+		- optional else or else if keywords
+		- top down, first true is executed
+		- ex:
+			if i % 2 == 0 {
+				// divisible by 2
+			} else if i % 3 == 0 {
+				// divisible by 3
+			} else if i % 4 == 0 {
+				// divisible by 4
+			}
+	- The switch Statement
+		- starts with the keyword switch followed by an expression and then a series of cases
+		- top down, first true is executed
+		- ex:
+			switch i {
+				case 0: fmt.Println("Zero")
+				case 1: fmt.Println("One")
+				case 2: fmt.Println("Two")
+				case 3: fmt.Println("Three")
+				case 4: fmt.Println("Four")
+				case 5: fmt.Println("Five")
+				default: fmt.Println("Unknown Number")
+			}
+	- for, if, switch are main control statements, others exist
+
+
+5. Arrays, Slices, and Maps (3 more built in types)
+	- Arrays
+		- numbered sequence of elements of a single type with a fixed length
+		- ex:
+			var x [5]int
+		- indexed from 0
+		- when equating to array length len(x) type conversion might be required
+		- use type as function
+			- ex:
+				fmt.Println(total / float64(len(x)))
+		- alternative for loop
+			- ex:
+				for i, value := range x {
+		- i must be used for current position or error is thrown, replace with _
+			- ex:
+				for _, value := range x {
+		- shorthand for arrays exists
+			- trailing comma is required is broken into multiple lines
+			- ex:
+				x := [5]float64{ 98, 93, 77. 82, 83}
+				or
+				x := [5]float64{
+					98,
+					93,
+					77,
+					82,
+					83,
+				}
+	- Slices
+		- type built on top of an array
+		- a slice is a segment of an array
+		- same as array, indexable and have a length
+		- diff from array, length is allowed to change
+		- slice should use built-in make function, not from array of non-specified length
+			-ex:
+				var x []float64
+				x := make([]float64, 5)
+		- slices are always associated with an array. They cannot be larger, but can be a smaller portion of said array
+			-ex: 	(array of length 5 with a capacity of 10)
+				x := make([]float64, 5, 10)
+		- can create an array with [low : high] expression
+		- low is where to start, high is where to end (not including itself)
+		- both can be omitted, or just one
+			- ex: (equal to one another)
+				arr[0:] == arr[0:len(arr)]
+				arr[:5] == arr[0:5]
+				arr[:] == arr[0:len(arr)]
+		- two built in functions, append and copy
+		- append
+			- add element onto end of slice
+				- if sufficient room in array, placed as last and length incremented
+				- if not sufficient room in array, new array created, all elements copied, placed as last
+		- copy
+			- two arguments (dst and src)
+			- src is copied into dst, overwriting dst, smallest length used
+		- slices are good to look up data by an integer
+	- Maps
+		- unordered collection of key-value pairs
+		- created with keyword map followed by the key type in brackets and then the value type
+		- ex:
+			var x map[string]int
+		- can be accessed using brackets but must be initialized first
+		- ex:
+			x := make(map[string]int)
+			x[“key”] = 10
+		- maps with type a key type of int look like an array but the length can change as items are added and maps are not sequential
+		- maps can delete items using delete function
+		- ex:
+			delete(x, 1)
+		- a look up for an element that doesn’t exist results in the zero value for the value type to be returned
+		- better way to check, accessing element can return two values, first the result, second if lookup was successful
+		- shorthand for maps exists
+		- ex:
+			elements := map[string]string{
+				“H”: “Hydrogen”,
+				“He”: “Helium”,
+			}
+		- maps can store maps
+		- ex:
+			elements3 := map[string]map[string]string{
+				"H" : map[string]string{
+					"name":"Hydrogen",
+					"state":"gas",
+				},
+				"He" : map[string]string{
+					"name":"Helium",
+					"state":"gas",
+				},
+			}
+		- better way to store structured data in later chapter
+
+
+6. Functions
+	- zero or more input, zero or more output
+	- func keyword followed by name
+	- parameters defined like “name type, name type, … “
+	- after parameters return type is specified
+	- ex:
+		func average(xs []float64) float64 {
+	- functions are built up in a call stack (push onto and pop off)
+	- it is possible to name a return type
+	- ex:
+		func f2() (r int) {
+			r = 1
+			return
+		}
+	- as stated above, multiple return values possible
+	- ex:
+		func f() (int, int) {
+			return 5, 6
+		}
+
+		func main() {
+			x, y := f()
+		}
+	- typical use would be an error value along with result
+	- Variadic Functions
+		- contain variadic parameter
+		- by using … before the type of last parameter you can indicate that parameter take zero or more of those parameters
+		- ex:
+			func add(args …int) int {
+		- ex:
+			add(1,2,3)
+		- this can also be done with slices
+		- ex:
+			func main() {
+				xs := []int{1,2,3}
+				fmt.Println(add(xs…))
+			}
+	- Closure
+		- functions can exist within functions
+		- scope allows access to local variables
+		- closures exist when a function inside references nonlocal variables
+		- closures can be created to return a function
+		- closure variables persist between calls, unlike normal local variables
+	- Recursion
+		- function calling itself
+		- useful for functional programming
+		- ex:
+			func factorial(x uint) uint {
+				if x == 0 {
+					return 1
+				}
+				return x * factorial(x-1)
+			}
+	- defer, panic, and recover
+		- defer
+			- schedules a function call to be run after the function completes
+			- often used when resources need to be free in some way
+			- ex:
+				f, _ := os.Open(filename)
+				defer f.Close()
+
+			- 3 advantages
+				- close near open so easy to understand
+				- multiple return statements will still close file
+				- deferred functions are run even if a runtime panic occurs
+		- panic and recover
+			- recover stops the panic and returns the value that was passed to the call
+			- panic immediately stops a function, a recover must be paired with a defer
+			- ex:
+				func main() {
+					defer func() {
+						str := recover()
+						fmt.Println(str)
+					}()
+					panic(“PANIC”)
+	- Pointers
+		- a variable passed as a function param is copied, in order to modify original variable in function a point is used.
+		- ex:
+			func main() {
+				x := 5
+				zero(&x)
+				fmt.Println(x)
+			}
+
+			func zero(xPtr *int) {
+				*xPtr = 0
+			}
+		- a pointer is a * followed by the type of the stored value
+		- * also used to dereference a point variable, allows access to the value the pointer points to
+		- the & operator is used to find the address of a variable, allows the modification of original variable
+	- new
+		- different way to get a pointer
+		- could be more memory intensive, go’s garbage collector usually takes care of it
+		- ex:
+			func main() {
+				newPtr := new(int)
+				one(newPtr)
+				fmt.Println(*newPtr)
+			}
+
+			func one(newPtr *int) {
+				*newPtr = 1
+			}
+
+
+7. Structs and Interface
+	- struct is a type that contains named fields
+	- type keyword introduces a new type, followed by the name of the type, then the keyword struct and a list of field inside of curly braces
+	- ex:
+		type Circle struct {
+			x float64
+			x float64
+			x float64
+		}
+	- fields are a set of groups variables, each has a name and type
+	- fields are collapsible like functions
+	- ex:
+		type Circle struct {
+			x, y, r float64
+		}
+	- variety of ways to create new type, new is uncommon but creates a pointer. Both ways will give fields zero value of type
+	- ex:
+		var c Circle
+		c := new(Circle)
+	- more typical way is to give each field an initial value, two ways to do this. Second leaves off field names if order is known.
+	- ex:
+		c := Circle{x: 0, y: 0, r: 5}
+		c := Circle{0, 0, 5}
+	- pointer can be used with struct
+	- ex:
+		c :=& Circle{0, 0, 5}
+	- Fields
+		- fields are accessed with the . Operator
+		- ex:
+			c.x = 5
+			c.y = 10
+	- Methods
+		- functions with a “receiver”
+		- receiver sits between keyword func and the name of the function, has a name and type, and allows calls using the . operator
+		- ex:
+			fmt.Println(c.area())
+		- & operator no longer needed with methods as go automatically knows to pass a pointer to the type
+	- Embedded Types
+		- helps build relationships to get away from “has a“ to “is a”
+		- sometimes referred to as anonymous fields
+	- Interfaces
+		- keyword type followed by name and the keyword interface
+		- ex:
+			type Shape interface {
+				area() float64
+			}
+		- defines a method set, type must have methods
+		- interfaces can also be used as fields
+
+
+8. Packages
+	- organization and faster recompilation
+	- core go packages
+		- fmt: formatting and output to screen
+		- strings: functions to work with strings
+		- os: input/output
+			- io package has a few functions, mostly found from interfaces in other packages
+		- errors: create new errors, etc
+		- Containers and Sort
+			- container/list: additional to lists and maps
+			- sort: sort with predefined slices or to help build your own
+		- Hashes and Cryptography
+			- hash/crc32 , crc64, adler32, fhv
+		- Servers
+			- common include TCP, HTTP, RPC
+			- encoding/gob
+			- net
+			- net/http
+			- net/rpc
+		- Parsing Command-Line arguments
+			- flag, allows for flags to be parsed
+	- Creating Packages
+		- once directory is all set, run go install to compile and create linkable object file
+		- go is hierarchical, okay/safe to use same name as go lib math
+		- to use both libraries alias’s are allowed
+		-ex:
+			import m “golang-book/chapter8/math”
+		- functions names within a package matter, capital letters essentially make the function public/exposed, lowercase for private/hidden
+		- Documentation
+			- godoc “package name” “function name” will display documentation of function.
+			- ex:
+				godoc cmd/golang-book/chapter8/math Average
+			- comment above function to add more info
+
+
+9. Testing
+	- go test
+	- files that end in _test.go are ignored by the go compiler
+	- special testing package “testing”
+
+
+10. Concurrency
+	- running tasks simultaneously
+	- Goroutines and Channels
+	- Goroutines
+		- keyword go followed by a function invocation
+		- ex:
+			go f(0)
+		- with goroutine, immediately return to next line and don’t wait for function to complete
+		- lightweight and can easily create thousands
+	- Channels
+		- provide a way for two goroutines to communicate with each other and synchronize their execution
+		- keyword chan followed by the type of the things that are passed on the channel
+		- <- operator is used to send and receive messages
+		- Channel Direction
+			- can specify direction on channel type, restricting to sending or receiving
+			- can wait till ready, “blocking”
+			- only send
+			- ex:
+				func pinger (c chan<- string)
+			- only send
+			- ex:
+				func pinger (c <-chan string)
+			- a channel that doesn’t have restrictions is know as “bidirectional”, can be passed to send only or receive only but not the reverse
+			- Select
+				- select works like a switch for channels
+				- common to use for a timeout
+			- Buffered Channels
+				- possible to pass a second param to the make function when creating a channel
+				- ex:
+					c := make(chan int, 1)
+				- would create a buffered channel with a capacity of 1
+				- normally channel synchronous, will wait until other side is ready, a buffered is asynchronous
+				- buffered will not wait to send or receive unless channel is full, it will wait
