@@ -1,0 +1,21 @@
+Chapter 1
+
+Background and fundamentals
+
+- Noteworthy aspect
+	- short variable declarations
+	- multiple return values (along with named returned values)
+	- modern standard library
+	- concurrency
+	- package management (productivity and faster compilation)
+	- testing
+		- go test
+	- code coverage
+		- go test - cover
+	- formatting
+		- go fmt
+	- run or build
+		- go run filename
+		or
+		- go build filename
+		- ./filename
