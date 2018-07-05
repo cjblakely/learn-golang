@@ -19,3 +19,45 @@ Background and fundamentals
 		or
 		- go build filename
 		- ./filename
+
+Chapter 2
+
+- Working with CLI applications
+    - Command-line flags
+        - arguments and flags designed after "Plan 9" and not common GNU/Linux
+        - single-character options cannot be in one line, ie "ls la"
+        - short/long does not matter, each flag must be separated from the others
+            - ex: flag_cli --spanish -name Buttercup
+        - begins with - or --
+        - easy to switch away from built-in go cli, import different package and alter Parse boolean
+        - some community flag packages use go built-in, some do not
+        - to use an outside package, use go get
+            - ex: go get github.com/jessevdk/go-flags
+    - Avoiding CLI boilerplate
+        - cli.go, often built with commands and subcommands, takes care of boilerplate
+    - Handling configuration
+        - 12-factor apps/12-factor pattern
+            - https://12factor.net/
+        - common config formats include JSON, YAML, INI, etc.
+            - JSON cannot contain comments,, frequent complaint for config files
+            - Go doesn't ship with YAML or INI processor, 3rd party available
+        - two common areas that may want to be changed/tolerance added with web servers
+            - matching URL paths to callback functions
+            - starting and stopping servers with an interest in graceful shutdown
+        - starting up and shutting down a server
+            - graceful shutdowns, package called manners
+               * skipping section for now
+    - Routing web requests
+        - paths ending in / but requested without will redirect to end in /, this may cause query strings to drop off
+        - resolution
+            - handler examples
+                /hello  will only work for
+                    /hello
+                /goodbye/ will work for
+                    /goodbye (with redirect)
+                    /goodbye/foo
+                    /goodbye/foo/bar
+        - handling complex paths with wildcards
+        - handling paths with regex
+        - criticism of go's built in http package is routing and multiplexing(muxing)
+            - many other packages are more flexible/powerful
