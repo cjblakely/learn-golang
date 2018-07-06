@@ -61,3 +61,71 @@ Chapter 2
         - handling paths with regex
         - criticism of go's built in http package is routing and multiplexing(muxing)
             - many other packages are more flexible/powerful
+
+    - repos used
+    go get github.com/jessevdk/go-flags
+    go get gopkg.in/urfave/cli.v1
+    go get gopkg.in/gcfg.v1
+
+Chapter 3
+
+- Concurrency in Go
+    - goroutine
+    - ability to do multiple things at one time
+    - other langs use "threads"
+    - go uses a model called "Communicating Sequential Processes", ie, Goroutines and Channels
+    - https://github.com/golang/go/wiki/LearnConcurrency
+    - one of the few places in Go where memory leaks can happen
+    - frequent use cases, read a file in the background, send messages to a remote log server, save the current state without pausing the program
+    - run concurrently, but not necessarily in parallel, ex: only one processor
+    - runtime.Gosched(), indicates to go that you can run some tasks in scheduler, important to yield to the scheduler for some goroutines to run
+        - sometimes running this may not ensure that the goroutine has completed prior to main finishing and the program terminating
+    - Go wait groups
+        - simple way to resolve issue stated above
+        - sync.WaitGroup
+            - several workers are started
+            - work is delegated to the workers
+            - one process delegates the tasks and then waits for them to complete to continue
+            - wait group is a message passing facility that signals a waiting goroutine its safe to proceed
+        - race condition
+            - two goroutines working with the same piece of data, where that data may change
+                - solution, place a lock on a resource until the goroutine is done, then unlock
+            - go run race-condition.go exampledata/example1.txt exampledata/example2.txt
+            - race flag can be added for better info, go run --race ...
+            - sync.Mutex, common way to add lock/unlock on a type
+            - only works if data is access with locks, cannot be some with and some without
+            - okay to allow multiple reads, but only one write
+    -channels
+        - easiest comparison is network sockets
+        - unidirectional or bidirectional
+        - can send structured data
+        - common use to signal when something is done or ready to close
+        - channels created with make, like maps and slices
+        - select statement can watch multiple channels
+        - some functions make channels for you, ie time.After
+        - closing channels
+            - memory manager (garbage collector) will only clean up values it knows it won't use again
+            - ie, careful with goroutines and channels (memory leaks)
+            - close should only be from the sender, in general with some protective guards
+            - suggested way is to use another channel to close
+            - receiver should never close receiving channel
+        - locked with buffered channels
+            - unbuffered channel contain one value at a time
+            - sometimes you want a channel as a lock
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
